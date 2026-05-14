@@ -1,0 +1,32 @@
+[project]
+name = "stateful-agents"
+version = "0.1.0"
+description = "Tiny crash-safe agent runtime backed by a checkpointed state store."
+requires-python = ">=3.11"
+authors = [{ name = "Aditya Painuli" }]
+dependencies = [
+    "redis>=5.0",
+    "pydantic>=2.5",
+    "openai>=1.30",
+    "asyncpg>=0.29",
+    "aiosqlite>=0.19",
+    "matplotlib>=3.8",
+    "numpy>=1.26",
+    "python-dotenv>=1.0",
+    "rich>=13",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-asyncio>=0.23", "ruff>=0.4"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["stateful_agents*", "demos*", "benchmarks*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

@@ -1,0 +1,18 @@
+%% stateful-agents — two-worker race (slide 12)
+sequenceDiagram
+    autonumber
+    participant A as Worker A
+    participant R as Redis
+    participant B as Worker B
+
+    A->>R: GET agent:demo-001
+    R-->>A: state @ step=FETCH_DATA, fetch_index=2
+    B->>R: GET agent:demo-001
+    R-->>B: state @ step=FETCH_DATA, fetch_index=2
+
+    Note over A,B: both workers compute step 3 in parallel<br/>neither knows the other exists
+
+    A->>R: SET agent:demo-001 (fetch_index=3, data=[…A])
+    B->>R: SET agent:demo-001 (fetch_index=3, data=[…B])
+
+    Note over R: silent corruption — last write wins.<br/>A's data section is gone forever.

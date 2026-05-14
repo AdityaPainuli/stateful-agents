@@ -1,0 +1,4 @@
+store,mean_ms,stdev_ms
+redis,1.705,1.021
+sqlite,0.193,0.113
+memory,0.01,0.001

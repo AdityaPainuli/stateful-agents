@@ -1,0 +1,11 @@
+%% stateful-agents — architecture (slide 6)
+flowchart LR
+    W[Worker Process] --> E[AgentEngine.run]
+    E --> H{Step Handler}
+    H -->|return new state| E
+    E -->|save after every step| S[StateStore]
+    S <--> R[(Redis)]
+    X((💥 crash)) -.-> W
+    R -.->|on restart, load_state| E
+    classDef boom fill:#7f1d1d,stroke:#f87171,color:#fff
+    class X boom

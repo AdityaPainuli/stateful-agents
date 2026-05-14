@@ -1,0 +1,13 @@
+store,concurrency,ops_per_sec
+redis,1,943.9
+redis,10,3797.0
+redis,50,5371.9
+redis,200,5237.0
+sqlite,1,5976.6
+sqlite,10,13081.0
+sqlite,50,14893.0
+sqlite,200,12480.0
+memory,1,114904.6
+memory,10,112109.1
+memory,50,107890.1
+memory,200,111801.5

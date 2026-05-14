@@ -1,0 +1,26 @@
+%% stateful-agents — fencing token timeline (slide 14)
+sequenceDiagram
+    autonumber
+    participant A as Worker A
+    participant R as Redis (lock + store)
+    participant B as Worker B
+
+    A->>R: SET lock:demo-001 NX PX 30000
+    R-->>A: OK
+    A->>R: INCR fence:demo-001
+    R-->>A: token=42
+    A->>A: working… (heartbeat every 10s)
+
+    Note over A,R: network partition — A's heartbeat<br/>can't reach Redis. Lock TTL expires.
+
+    B->>R: SET lock:demo-001 NX PX 30000
+    R-->>B: OK
+    B->>R: INCR fence:demo-001
+    R-->>B: token=43
+    B->>R: save(state, fencing_token=43)
+    R-->>B: OK (43 ≥ 43)
+
+    Note over A: A wakes up, still thinks it holds the lock.
+    A->>R: save(state, fencing_token=42)
+    R-->>A: ❌ StaleWriteError (expected ≥43, got 42)
+    Note over R: corruption averted. A aborts<br/>and exits cleanly.
